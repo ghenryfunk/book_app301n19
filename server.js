@@ -21,10 +21,20 @@ app.use(cors());
 app.use(express.static('./public'));
 
 // Decode our POST data - makes sure our data doesn't show in the URL
-app.use(express.urlencoded({ extended: true }));
+// app.use(express.urlencoded({ extended: true }));
 
 // Set default view engine
 app.set('view engine', 'ejs');
+
+// Routes
+// default route to test proof of life
+app.get('/hello', function(req, res) {
+  res.render('pages/index', {
+    foo: 'bar'
+  });
+});
+
+
 
 
 // Start our server
