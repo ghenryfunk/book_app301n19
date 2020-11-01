@@ -1,6 +1,6 @@
 'use strict';
 
-// bring in our dependencies 
+// bring in our dependencies
 
 const express = require('express');
 const superagent = require('superagent');
@@ -50,4 +50,12 @@ function searchHandler(req, res) {
 // Start our server
 app.listen(PORT, () => console.log(`Now listening on port ${PORT}.`));
 
+// Constructors
+function Book (obj) {
+  this.author = obj.authors;
+  this.title = obj.title;
+  this.description = obj.description;
+  this.image_url = obj.imageLinks.thumbnail || 'https://i.imgur.com/J5LVHEL.jpg';
+}
 
+// Ternary Operator
