@@ -34,8 +34,18 @@ app.get('/hello', function(req, res) {
   });
 });
 
+app.get('/searches/new', searchHandler);
 
-
+//Creating handler functions
+function searchHandler(req, res) {
+  // const URLAuthor = `https://www.googleapis.com/books/v1/volumes?q=${req}+intitle:${req}`;
+  // const URLTitle = `https://www.googleapis.com/books/v1/volumes?q=${req}+inauthor:${req}`;
+  const searchURL = {
+    URLTitle: `https://www.googleapis.com/books/v1/volumes?q=${req}+intitle:${req}`,
+    URLAuthor: `https://www.googleapis.com/books/v1/volumes?q=${req}+inauthor:${req}`
+  };
+  res.render('pages/searches/new', searchURL);
+}
 
 // Start our server
 app.listen(PORT, () => console.log(`Now listening on port ${PORT}.`));
