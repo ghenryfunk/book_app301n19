@@ -37,6 +37,9 @@ app.get('/', function (req, res) {
 //render the Search Form
 app.get('/searches/new', showForm);
 
+// Create new search to Google Book API
+app.post('/searches', createSearch);
+
 //Creating handler functions
 function showForm(req, res) {
   // // const URLAuthor = `https://www.googleapis.com/books/v1/volumes?q=${req}+intitle:${req}`;
@@ -45,35 +48,36 @@ function showForm(req, res) {
   //   URLTitle: `https://www.googleapis.com/books/v1/volumes?q=${req}+intitle:${req}`,
   //   URLAuthor: `https://www.googleapis.com/books/v1/volumes?q=${req}+inauthor:${req}`
   // };
-  res.render('pages/searches/new.ejs');
+  res.render('pages/searches/new');
 }
 
-// Create new search to Google Book API
-app.post('/searches', createSearch);
+
 
 function createSearch(req, res) {
-  let url = 'https://www.googleapis.com/books/v1/volumes?q=';
+  console.log('hello route');
+  let url = `https://www.googleapis.com/books/v1/volumes?q=`;
 
   console.log('req.body is ', req.body);
   console.log('req.body.search is ', req.body.search);
 
-  if (req.body.search[1] === 'title') {
-    url += `+intitle:${req.body.search[0]}`;
+  if (req.body.sort === 'title') {
+    url += `+intitle:${req.body.search}`;
   }
-  if (req.body.search[1] === 'author') {
-    url += `+inauthor:${req.body.search[0]}`;
+  if (req.body.sort === 'author') {
+    url += `+inauthor:${req.body.search}`;
   }
 
+
+
+  console.log(url);
   superagent
     .get(url)
-    .then(apiResponse =>
-      apiResponse.body.items.map(
+    .then(apiResponse => {
+      const newArr = apiResponse.body.items.map(
         bookResult => new Book(bookResult.volumeInfo)
-      )
-    )
-    .then(results =>
-      res.render('pages/searches/show', { searchResults: results })
-    )
+      );
+      res.render('pages/searches/show', { searchResults: newArr });
+    })
     .catch((error) => {
       console.log('error', error);
       res.status(500).render('Something went wrong with the Book Results... maybe because you used .render instead of .send?');
