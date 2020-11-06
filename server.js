@@ -5,6 +5,7 @@
 const express = require('express');
 const superagent = require('superagent');
 const cors = require('cors');
+const pg = require('pg');
 
 require('dotenv').config();
 
@@ -82,8 +83,6 @@ function createSearch(req, res) {
     });
 }
 
-// Start our server
-app.listen(PORT, () => console.log(`Now listening on port ${PORT}.`));
 
 // Constructors
 function Book(obj) {
@@ -91,7 +90,26 @@ function Book(obj) {
   this.title = obj.title;
   this.description = obj.description;
   this.image_url =
-    obj.imageLinks.thumbnail || 'https://i.imgur.com/J5LVHEL.jpg';
+  obj.imageLinks.thumbnail || 'https://i.imgur.com/J5LVHEL.jpg';
 }
 
-// Ternary Operator
+// Start our server
+app.listen(PORT, () => console.log(`Now listening on port ${PORT}.`));
+
+// Connect to Database
+const client = new pg.Client(process.env.DATABASE_URL);
+// client.connect();
+client.on('error', err => {
+  console.error(err);
+});
+
+
+
+client.connect()
+  .then( () => {
+    // Listen on a port
+    app.listen(PORT, () => {
+      console.log(`Now listening on port ${PORT}`);
+    });
+  })
+  .catch( err => console.error(err));
