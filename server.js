@@ -29,9 +29,7 @@ app.set('view engine', 'ejs');
 // Routes
 // default route to test proof of life
 app.get('/', function (req, res) {
-  res.render('pages/index', {
-    foo: 'bar',
-  });
+  res.render('pages/index');
 });
 
 //render the Search Form
