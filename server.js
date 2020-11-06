@@ -10,7 +10,7 @@ const pg = require('pg');
 require('dotenv').config();
 
 // create PORT
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 3001;
 
 // instantiate express app
 const app = express();
@@ -94,7 +94,7 @@ function Book(obj) {
 }
 
 // Start our server
-app.listen(PORT, () => console.log(`Now listening on port ${PORT}.`));
+// app.listen(PORT, () => console.log(`Now listening on port ${PORT}.`));
 
 // Connect to Database
 const client = new pg.Client(process.env.DATABASE_URL);
