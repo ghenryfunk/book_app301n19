@@ -29,17 +29,28 @@ app.set('view engine', 'ejs');
 
 // Routes
 // default route to test proof of life
-app.get('/', function (req, res) {
-  res.render('pages/index');
-});
-
+app.get('/', getHome);
 //render the Search Form
 app.get('/searches/new', showForm);
 
-// Create new search to Google Book API
+// Create new search to Google Book API/ add that data to the database
 app.post('/searches', createSearch);
 
+
+
+
 //Creating handler functions
+function getHome(req, res) {
+  const SQL = 'SELECT * FROM books;';
+
+  return client.query(SQL)
+    .then(results => res.render('pages/index', { results: results.rows}))
+    .catch((error) => {
+      console.log('error', error);
+      res.status(500).render('Something went wrong loading homepage');
+    });
+}
+
 function showForm(req, res) {
   // // const URLAuthor = `https://www.googleapis.com/books/v1/volumes?q=${req}+intitle:${req}`;
   // // const URLTitle = `https://www.googleapis.com/books/v1/volumes?q=${req}+inauthor:${req}`;
@@ -53,7 +64,6 @@ function showForm(req, res) {
 
 
 function createSearch(req, res) {
-  console.log('hello route');
   let url = `https://www.googleapis.com/books/v1/volumes?q=`;
 
   console.log('req.body is ', req.body);
