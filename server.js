@@ -78,7 +78,7 @@ function createSearch(req, res) {
 
 
 
-  console.log(url);
+  console.log('url is ', url);
   superagent
     .get(url)
     .then(apiResponse => {
@@ -86,6 +86,7 @@ function createSearch(req, res) {
         bookResult => new Book(bookResult.volumeInfo)
       );
       res.render('pages/searches/show', { searchResults: newArr });
+      console.log('newArr is ', newArr);
     })
     .catch((error) => {
       console.log('error', error);
@@ -98,6 +99,7 @@ function createSearch(req, res) {
 function Book(obj) {
   this.author = obj.authors;
   this.title = obj.title;
+  this.isbn = obj.industryIdentifiers[0].identifier;
   this.description = obj.description;
   this.image_url =
   obj.imageLinks.thumbnail || 'https://i.imgur.com/J5LVHEL.jpg';
